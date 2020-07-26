@@ -54,7 +54,7 @@ public class SqliteStorage implements Storage {
         SQLiteDataSource dataSource = (SQLiteDataSource) this.dataSource;
         dataSource.setUrl(jdbcUrl);
 
-        String sql = "CREATE TABLE IF NOT EXISTS `test` (" +
+        String createTable = "CREATE TABLE IF NOT EXISTS `test` (" +
                 "`str` VARCHAR(36), " +
                 "`int` INT, " +
                 "`double` DOUBLE, " +
@@ -62,11 +62,34 @@ public class SqliteStorage implements Storage {
                 "`long` BIGINT" +
                 ")";
         try (Connection con = this.dataSource.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(createTable)) {
             ps.executeUpdate();
         }
 
-        this.storeData(dataset);
+        String replace = "REPLACE INTO `test` (`str`, `int`, `double`, `float`, `long`) VALUES (?, ?, ?, ?, ?)";
+        try (Connection con = this.dataSource.getConnection()) {
+            con.setAutoCommit(false);
+
+            try {
+                for (GeneratedData data : dataset) {
+                    try (PreparedStatement ps = con.prepareStatement(replace)) {
+                        ps.setString(1, data.getDataAt(0, String.class));
+                        ps.setInt(2, data.getDataAt(1, int.class));
+                        ps.setDouble(3, data.getDataAt(2, double.class));
+                        ps.setFloat(4, data.getDataAt(3, float.class));
+                        ps.setLong(5, data.getDataAt(4, long.class));
+
+                        ps.executeUpdate();
+                    }
+
+                }
+
+                con.commit();
+            } catch (Exception e) {
+                con.rollback();
+                throw e;
+            }
+        }
     }
 
     @Override

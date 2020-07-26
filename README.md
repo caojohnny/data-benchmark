@@ -1,10 +1,11 @@
 # `data-benchmark`
 
-A common question that I see asked quite often what the best method is for
-storing or persisting data. Generally, for Bukkit plugins, this will probably
-be between something like MySQL, YAML, JSON or a cross between a database and
-flat-file like SQLite. `data-benchmark` is designed to be a benchmark suite for
-these different methods of storing and retrieving data.
+I commonly see questions asked regarding the best method of storing or
+persisting data. Generally, for Bukkit plugins, this will probably be between
+something like MySQL, YAML, JSON or a cross between a database and flat-file
+like SQLite. `data-benchmark` is a benchmark suite for gathering empirical
+performance data on different ways of data persistence to help inform your
+decision.
 
 # Implementation
 
@@ -14,8 +15,8 @@ be measured by the benchmark. The different generators and storage methods are
 combined and each tested. The test procedure first inserts some specified
 number of data into the storage first to simulate there being existing data.
 The test performs a warm-up and then performs a second measurement round. Both
-will first insert/upsert a constant number of entries and then selects a single
-random entry for the store and query operations.
+will insert/upsert a constant number of entries and then select a single random
+entry for the store and query operations, respectively.
 
 This is not designed as a microbenchmark. The benchmark results are supposed to
 be an estimate of the "system" performance, that is, how different storage
@@ -25,9 +26,11 @@ use if that is something that you are concerned with. `data-benchmark` includes
 parsing and serialization times in addition to external influences such as
 garbage collection and file system response times. These values change from
 system to system depending on your hardware such as CPU and your physical
-storage mediums like an SSD or HDD. With that being said, for tests that include
+storage mediums like an SSD or HDD. The inclusion of these other variables in
+the final time is intentional. With that being said, for tests that include
 more than one `Storage` method, the tests will be inverted and run a second time
-to attempt and minimize skew due to running the tests on the same JVM.
+and then averaged minimize (but not eliminate) skew due to running the tests on
+the same JVM.
 
 # Build
 
@@ -41,8 +44,8 @@ cd data-benchmark
 
 The benchmark executable is bundled as a standard JAR file, which can be found
 in the `build/libs` folder after following the build instructions above. The
-benchmark utilizes 2 JVM variables for connecting to a localhost MySQL server,
-which can be specified in the following manner:
+benchmark utilizes 2 JVM variables for the credentials to a localhost MySQL
+server, which can be specified in the following manner:
 
 ```
 java -Ddata-benchmark.mysql.user=root -Ddata-benchmark.mysql.pass=password -jar DataBenchmark.jar 
@@ -94,20 +97,22 @@ through the differences real quick:
   `INSERT INTO ... ON DUPLICATE KEY UPDATE`
   * `MySQL REPLACE` - Uses indexing, uses transactions, uses `REPLACE` instead
   * `SQLite` (not in the results) - No indexing, no transactions, uses `REPLACE`
-  * `SQLite Unsafe` - Uses indexing, uses transactions, uses `REPLACE`
-  * `SQLite Transaction` - Uses indexing, uses transactions, uses `REPLACE`
+  * `SQLite Unsafe` - Uses indexing, uses transactions, uses `REPLACE`, disables
+  any journaling and file system synchronization
+  * `SQLite Transaction` - Uses indexing, uses transactions, uses `REPLACE`,
+  uses journaling and synchronizes with the file system
   
 The reason I've decided to use `REPLACE` is that it is really common for vanilla
-Spigot plugins to support Spigot 1.8.8, which has a really old SQLite driver
-(like 3.7 ish old), which does not support UPSERT yet. That being said, if
-the results between `MySQL` and `MySQL REPLACE` say anything, this might not
-really matter anyways.
+Spigot plugins to support Spigot 1.8.8, which has an old SQLite driver (like 3.7
+ish old), that does not support `UPSERT` yet. That being said, if the results
+between `MySQL` and `MySQL REPLACE` say anything, this might not really matter
+anyways.
 
 Either way, between using `MySQL` and `MySQL REPLACE`, it seems that there is
 practically no difference. Though the times suggest that the
 `INSERT INTO ... ON DUPLICATE KEY UPDATE` version is slightly slower, I would
-be hesitant to say that would be the case with just 19 ms separating the two
-that is well within the margin of error considering the amount of jitter the
+be hesitant to say that would be the case with just 19 ms separating the two.
+It is well within the margin of error considering the amount of jitter the
 measurement times indicate - this is why it is important to look at all of the
 data!
 
@@ -118,9 +123,10 @@ getting rid of any safety features built-into SQLite, both storage and query
 times are capable of outperforming flat-file formats, although I would be
 hesitant to use this in production.
 
-SQLite without using transactions were many orders of a magnitude slower than
+SQLite without using transactions was many orders of a magnitude slower than
 with transactions, so I cut it short at the 30 minute mark and re-ran the test
-without it.
+without it. The same effect was repeated with MySQL, so the takeaway here is
+always use a transaction to wrap bulk insertions.
 
 Long story short, if I had to select one out of the list of options, I would
 honestly probably go with SQLite, with JSON coming up a close second *from
