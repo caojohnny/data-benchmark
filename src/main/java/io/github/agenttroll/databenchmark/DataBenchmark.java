@@ -68,7 +68,8 @@ public class DataBenchmark {
                 generators.size() * storages.size());
         runSuite(generators, storages, results);
 
-        if (storages.size() > 1) {
+        int runCount = storages.size() == 1 ? 1 : 2;
+        if (runCount != 1) {
             log("Reversing storages to reduce skew...");
             log("");
 
@@ -81,9 +82,9 @@ public class DataBenchmark {
             BenchmarkResult result = entry.getValue();
 
             log("%s - STORE = %.3f ms", entry.getKey(),
-                    result.getTotalStoreMs() / N_ITERATIONS / 2);
+                    result.getTotalStoreMs() / N_ITERATIONS / runCount);
             log("%s - QUERY = %.3f ms", entry.getKey(),
-                    result.getTotalQueryMs() / N_ITERATIONS / 2);
+                    result.getTotalQueryMs() / N_ITERATIONS / runCount);
         }
     }
 
