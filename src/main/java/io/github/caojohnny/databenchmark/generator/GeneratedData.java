@@ -1,6 +1,6 @@
-package io.github.agenttroll.databenchmark.generator;
+package io.github.caojohnny.databenchmark.generator;
 
-import io.github.agenttroll.databenchmark.storage.Storage;
+import io.github.caojohnny.databenchmark.storage.Storage;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**

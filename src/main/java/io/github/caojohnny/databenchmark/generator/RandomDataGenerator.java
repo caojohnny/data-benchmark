@@ -1,4 +1,4 @@
-package io.github.agenttroll.databenchmark.generator;
+package io.github.caojohnny.databenchmark.generator;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 

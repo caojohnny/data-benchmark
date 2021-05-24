@@ -1,17 +1,16 @@
-package io.github.agenttroll.databenchmark;
+package io.github.caojohnny.databenchmark;
 
-import io.github.agenttroll.databenchmark.generator.DataGenerator;
-import io.github.agenttroll.databenchmark.generator.GeneratedData;
-import io.github.agenttroll.databenchmark.generator.RandomDataGenerator;
-import io.github.agenttroll.databenchmark.generator.SameKeyGenerator;
-import io.github.agenttroll.databenchmark.statistics.BenchmarkResult;
-import io.github.agenttroll.databenchmark.storage.*;
+import io.github.caojohnny.databenchmark.generator.DataGenerator;
+import io.github.caojohnny.databenchmark.generator.GeneratedData;
+import io.github.caojohnny.databenchmark.generator.RandomDataGenerator;
+import io.github.caojohnny.databenchmark.generator.SameKeyGenerator;
+import io.github.caojohnny.databenchmark.statistics.BenchmarkResult;
+import io.github.caojohnny.databenchmark.storage.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.github.agenttroll.databenchmark.statistics.BenchmarkResult.NS_PER_MS;
 import static java.lang.String.format;
 
 /**
@@ -183,8 +182,8 @@ public class DataBenchmark {
             storage.cleanupIter(dataCollection);
 
             log("STORE = %.3f ms, QUERY = %.3f ms",
-                    (double) storeNs / NS_PER_MS,
-                    (double) queryNs / NS_PER_MS);
+                    (double) storeNs / BenchmarkResult.NS_PER_MS,
+                    (double) queryNs / BenchmarkResult.NS_PER_MS);
         }
 
         storage.cleanup();

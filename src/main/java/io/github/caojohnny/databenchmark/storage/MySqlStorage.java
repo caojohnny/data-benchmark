@@ -1,7 +1,7 @@
-package io.github.agenttroll.databenchmark.storage;
+package io.github.caojohnny.databenchmark.storage;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import io.github.agenttroll.databenchmark.generator.GeneratedData;
+import io.github.caojohnny.databenchmark.generator.GeneratedData;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.sql.DataSource;

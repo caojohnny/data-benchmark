@@ -35,7 +35,7 @@ the same JVM.
 # Build
 
 ```
-git clone git@github.com:AgentTroll/data-benchmark.git
+git clone git@github.com:caojohnny/data-benchmark.git
 cd data-benchmark
 ./gradlew clean shadowJar
 ```

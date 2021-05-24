@@ -5,7 +5,7 @@ plugins {
     id 'net.ltgt.errorprone' version '1.1.1'
 }
 
-group 'io.github.agenttroll'
+group 'io.github.caojohnny'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -25,7 +25,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'io.github.agenttroll.databenchmark.DataBenchmark'
+        attributes 'Main-Class': 'io.github.caojohnny.databenchmark.DataBenchmark'
     }
 }
 

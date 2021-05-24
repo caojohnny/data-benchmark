@@ -1,8 +1,8 @@
-package io.github.agenttroll.databenchmark.storage;
+package io.github.caojohnny.databenchmark.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import io.github.agenttroll.databenchmark.generator.GeneratedData;
+import io.github.caojohnny.databenchmark.generator.GeneratedData;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.BufferedReader;

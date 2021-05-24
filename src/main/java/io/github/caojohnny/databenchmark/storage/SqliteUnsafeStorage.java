@@ -1,4 +1,4 @@
-package io.github.agenttroll.databenchmark.storage;
+package io.github.caojohnny.databenchmark.storage;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.sqlite.SQLiteConfig;

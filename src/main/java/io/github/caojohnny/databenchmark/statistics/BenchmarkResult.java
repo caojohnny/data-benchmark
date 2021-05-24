@@ -1,4 +1,4 @@
-package io.github.agenttroll.databenchmark.statistics;
+package io.github.caojohnny.databenchmark.statistics;
 
 import java.util.ArrayList;
 import java.util.List;
